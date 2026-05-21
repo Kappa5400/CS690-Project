@@ -196,5 +196,37 @@ class InitDB{
 
     }
 
+    static void getSudoViaIndex(int index)
+    {
+        using var connection = newSqliteConnection(ConnectionString);
+        connection.Open();
+
+        using var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM sudo WHERE sudoIndex = $index";
+        command.Parameters.AddWithValue("$index", index);
+
+        using var reader = command.ExcecuteReader();
+
+        while (reader.Read())
+        {
+            long id = reader.GetInt64(0);
+            string password = reader.GetString(1);
+            string name = reader.GetString(2);
+        }
+
+        /*
+        CREATE TABLE IF NOT EXISTS sudo (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            password STRING,
+            name STRING
+        */
+
+        Console.WriteLine($@"ID: {id}
+            Name: {name}
+            Password: {password}
+            ");
+
+    }
+
 }
 
