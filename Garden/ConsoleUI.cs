@@ -20,7 +20,7 @@ public class ConsoleUI {
 				                    "Garderner/Volunteer", "Manager"
 				                }));
 
-
+        // to implement: seperate user role here
         if(user=="Garderner/Volunteer") {
 
            string command;
@@ -46,7 +46,7 @@ public class ConsoleUI {
 
             //to implement: password login method
             string command;
-            
+
             do {
                 
                 command = AnsiConsole.Prompt(
@@ -58,6 +58,7 @@ public class ConsoleUI {
 
                 if(command=="CRUD") {
                     Console.WriteLine("Hi");
+
                 } 
 
 
