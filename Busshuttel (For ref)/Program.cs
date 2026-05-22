@@ -4,7 +4,6 @@ class Program
 {
     static void Main(string[] args)
     {
-        initDB.init();
         ConsoleUI theUI = new ConsoleUI();
         theUI.Show();
     }
