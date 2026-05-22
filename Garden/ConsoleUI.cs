@@ -57,8 +57,9 @@ public class ConsoleUI {
 				                        }));
 
                 if(command=="CRUD") {
-                    Console.WriteLine("Hi");
-
+                    Console.WriteLine("Entering CRUD tool");
+                    // check if below correct syntax
+                    crud.crudManager();
                 } 
 
 

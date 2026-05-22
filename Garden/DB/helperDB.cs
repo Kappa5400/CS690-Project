@@ -5,8 +5,8 @@ using System;
 
 class helperDB
 {
-    //Create methods
-
+    //Create, delete, and update methods
+    
     static void createGarderner(bool toolUsing, bool plotOwn, int toolUsingIndex, int plotOwnIndex, string name)
     {
         using var connection = newSqliteConnection(ConnectionString);

@@ -105,6 +105,30 @@ class selectDB{
         }
     }
 
+
+    static void getAllSudo()
+    {
+        using var connection = newSqliteConnection(ConnectionString);
+        connection.Open();
+
+        using var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM sudo";
+
+        using var reader = command.ExcecuteReader();
+
+        while (reader.Read())
+        {
+            long id = reader.GetInt64(0);
+            string password = reader.GetString(1);
+            string name = reader.GetString(2);
+            Console.WriteLine($@"ID: {id}
+            Name: {name}
+            Password: {password}
+            ");
+        }
+
+    }
+
     static void getVolunteerViaIndex(int index)
     {
         using var connection = newSqliteConnection(ConnectionString);

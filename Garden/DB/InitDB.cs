@@ -3,6 +3,10 @@ namespace Garden;
 using Microsoft.Data.Sqlite;
 using System;
 
+
+// init db functions, create empty tables
+// sql schemas setup
+
 class InitDB{
     private const string ConnectionString = "Data Source=garden.db";
 
