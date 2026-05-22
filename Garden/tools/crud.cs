@@ -104,29 +104,64 @@ public class crud
                         }
                     else if(crudCommand == "Create")
                         {
-                            // to implement
+                            // garderner
+                            if(userType == 1)
+                            {
+                                // make these null so empty can be used if no tool or plot exist for garderner
+                                int toolUsingIndex = null;
+                                int plotOwnIndex = null;
+
+                                bool toolUsing = AskForInput("Enter 1 if garderner is using a tool or 0 if they are not:");
+                                // lookup if bool can be 1 or 0
+                                if(toolUsing == 1)
+                                {
+                                    int toolUsingIndex = AskForInput("Enter index of tool that is being used.");
+                                }
+                                bool plotOwn = AskForInput("Enter 1 if garderner has a plot or 0 if they do not: ");
+                                if(plotOwn == 1)
+                                {
+                                    int plotOwnIndex = AskForInput("Enter plot index of owned plot:");
+                                }
+                                string name = AskForInput("Enter garderner name:");
+                                helperDB.createGarderner(toolUsing, plotOwn, toolUsingIndex, plotOwnIndex, name);
+                                crudManager();
+                            }
+                            // volunteer
+                            if(userType == 2)
+                            {
+                                helperDB.createVolunteer(index);
+                                crudManager();
+                            }
+                            // sudo
+                            if(userType == 3)
+                            {
+                                helperDB.createSudo(index);
+                                crudManager();
+                            }
                         }
                     else if(crudCommand == "Update")
                         {
                             // to implement
+                            int index = AskForInput("Select index: ");
+
                         }
                     else if(crudCommand == "Delete")
                         {
-                            int index = AskForInput("Select index: ");
+                            int index = AskForInput("Select index to delete: ");
                             
                                if(userType == 1)
                             {
-                                selectDB.deleteGarderner(index);
+                                helperDB.deleteGarderner(index);
                                 crudManager();
                             }
                             if(userType == 2)
                             {
-                                selectDB.deleteVolunteer(index);
+                                helperDB.deleteVolunteer(index);
                                 crudManager();
                             }
                             if(userType == 3)
                             {
-                                selectDB.deleteSudo(index);
+                                helperDB.deleteSudo(index);
                                 crudManager();
                             }
                         }
@@ -136,8 +171,8 @@ public class crud
                             crudManager();
                         }
 
-
-                }
+        }
+    }
     
     public static string AskForInput(string message) {
         Console.Write(message);
