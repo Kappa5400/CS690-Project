@@ -325,7 +325,7 @@ class selectDB{
 
     }
 
-    static void getAllTools(int index)
+    static void getToolsViaIndex(int index)
     {
         using var connection = newSqliteConnection(ConnectionString);
         connection.Open();
