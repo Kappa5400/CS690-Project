@@ -32,13 +32,16 @@ public class ConsoleUI {
                                     .Title("Select a menu")
                                     .AddChoices(new[]
                                     {
-                                        "test","end"
+                                        "test","garden plot manager","end"
                                     }));
                 if (command == "test")
                 {
                     Console.WriteLine("Hi");
                 }
-
+                else if(command=="garden plot manager")
+                {
+                    gardenPlotManager.start();
+                }
 
                 } while(command!="end");
 
