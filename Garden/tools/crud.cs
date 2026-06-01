@@ -17,11 +17,22 @@ public class crud
             .Title("Select a submenu")
             .AddChoices(new[]
             {
-                "Users", "Tools", "Tasks"
+                "Users", "Tools", "Tasks", "Plot", "Back"
             })
         );
 
-        if (command == "Users")
+        if (command == "Back")
+        {
+            return;
+        }
+
+        else if(command == "Plot")
+        {
+            //to impliment
+            return;
+        }
+
+        else if (command == "Users")
         {
             string userCommandUserTypeSelect;
 
@@ -132,7 +143,7 @@ public class crud
                 
                 // Pass value or fallback fallback values if missing
                 helperDB.createGarderner(toolUsing, plotOwn, toolUsingIndex ?? 0, plotOwnIndex ?? 0, name);
-                crudManager();
+                return;
             }
             // volunteer
             if (userType == 2)
@@ -140,7 +151,7 @@ public class crud
                 int taskNum = int.Parse(AskForInput("Enter volunteer task number: ") ?? "0");
                 string name = AskForInput("Enter volunteer name: ");
                 helperDB.createVolunteer(taskNum, name); 
-                crudManager();
+                return;
             }
             // sudo
             if (userType == 3)
@@ -178,7 +189,7 @@ public class crud
         }
         else if (crudCommand == "Back")
         {
-            crudManager();
+            return;
         }
     }
     

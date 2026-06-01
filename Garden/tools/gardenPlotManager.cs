@@ -31,7 +31,7 @@ public class gardenPlotManager
                 }
                 else if (command == "back")
                 {
-                    ConsoleUI.Show();
+                    return;
                 } 
         } while(command!="end");
     }
