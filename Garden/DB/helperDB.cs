@@ -3,244 +3,294 @@ namespace Garden;
 using Microsoft.Data.Sqlite;
 using System;
 
-class helperDB
+public class helperDB
 {
+  
+    public static void createGarderner(bool toolUsing, bool plotOwn, int toolUsingIndex, int plotOwnIndex, string name)
+    {
+        using var connection = new SqliteConnection(InitDB.ConnectionString);
+        connection.Open();
+
+        using var command = connection.CreateCommand();
+        
+        command.CommandText = "INSERT INTO garderner (toolUsing, plotOwn, toolUsingIndex, plotOwnIndex, name) VALUES ($toolUsing, $plotOwn, $toolUsingIndex, $plotOwnIndex, $name)";
+        
     
-    //Create, delete, and update methods
-    
-    static void createGarderner(bool toolUsing, bool plotOwn, int toolUsingIndex, int plotOwnIndex, string name)
-    {
-        using var connection = newSqliteConnection(ConnectionString);
-        connection.Open();
+        command.Parameters.AddWithValue("$toolUsing", toolUsing);
+        command.Parameters.AddWithValue("$plotOwn", plotOwn);
+        command.Parameters.AddWithValue("$toolUsingIndex", toolUsingIndex);
+        command.Parameters.AddWithValue("$plotOwnIndex", plotOwnIndex);
+        command.Parameters.AddWithValue("$name", name); 
 
-        using var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO garderner VALUES ('$toolUsing, $plotOwn, $toolUsingIndex, $plotOwnIndex, $name')";
-        command.Parameters.AddWithValue("$toolUsing", toolUsing, "$plotOwn", plotOwn, 
-        "$toolUsingIndex", toolUsingIndex, "$plotOwnIndex", plotOwnIndex, "$name", Name);
+        command.ExecuteNonQuery(); 
     }
 
-    static void createVolunteer(int task, string name)
+    public static void createVolunteer(int task, string name)
     {
-        using var connection = newSqliteConnection(ConnectionString);
+        using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
 
         using var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO volunteer VALUES ('$task, $name')";
-        command.Parameters.AddWithValue("$task", task, "$name", Name);
+        command.CommandText = "INSERT INTO volunteer (task, name) VALUES ($task, $name)";
+        command.Parameters.AddWithValue("$task", task);
+        command.Parameters.AddWithValue("$name", name);
+
+        command.ExecuteNonQuery();
     }
 
-    static void createSudo(string password, string name)
+    public static void createSudo(string password, string name)
     {
-        using var connection = newSqliteConnection(ConnectionString);
+        using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
 
         using var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO sudo VALUES ('$password, $name')";
-        command.Parameters.AddWithValue("$password", password, "$name", Name);
+        command.CommandText = "INSERT INTO sudo (password, name) VALUES ($password, $name)";
+        command.Parameters.AddWithValue("$password", password);
+        command.Parameters.AddWithValue("$name", name);
+
+        command.ExecuteNonQuery();
     }
 
-    static void creatPlot(int location, bool inUse, int ownerGardernerIndex, string plotDescription)
+    public static void creatPlot(int location, bool inUse, int ownerGardernerIndex, string plotDescription)
     {
-        using var connection = newSqliteConnection(ConnectionString);
+        using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
 
         using var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO plot VALUES ('$location, $inUse, $ownerGardernerIndex, $plotDescription')";
-        command.Parameters.AddWithValue("$location", location, "$inUse", inUse, 
-        "$ownerGardernerIndex", ownerGardernerIndex, "$plotDescription", plotDescription);
+        command.CommandText = "INSERT INTO plot (location, inUse, ownerGardernerIndex, plotDescription) VALUES ($location, $inUse, $ownerGardernerIndex, $plotDescription)";
+        command.Parameters.AddWithValue("$location", location);
+        command.Parameters.AddWithValue("$inUse", inUse);
+        command.Parameters.AddWithValue("$ownerGardernerIndex", ownerGardernerIndex);
+        command.Parameters.AddWithValue("$plotDescription", plotDescription);
+
+        command.ExecuteNonQuery();
     }
 
-    static void creatTool(bool inUse, int usingGardernerIndex, string toolDescription)
+    public static void creatTool(bool inUse, int usingGardernerIndex, string toolDescription)
     {
-        using var connection = newSqliteConnection(ConnectionString);
+        using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
 
         using var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO tool VALUES ('$inUse, $usingGardernerIndex, $toolDescription')";
-        command.Parameters.AddWithValue("$inUse", inUse, 
-        "$usingGardernerIndex", usingGardernerIndex, "$toolDescription", toolDescription);
+        command.CommandText = "INSERT INTO tool (inUse, usingGardernerIndex, toolDescription) VALUES ($inUse, $usingGardernerIndex, $toolDescription)";
+        command.Parameters.AddWithValue("$inUse", inUse);
+        command.Parameters.AddWithValue("$usingGardernerIndex", usingGardernerIndex);
+        command.Parameters.AddWithValue("$toolDescription", toolDescription);
+
+        command.ExecuteNonQuery();
     }
 
-    static void creatTask(bool toDoStatus, int assignedVolunteerIndex, string taskDescription)
+    public static void creatTask(bool toDoStatus, int assignedVolunteerIndex, string taskDescription)
     {
-        using var connection = newSqliteConnection(ConnectionString);
+        using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
 
         using var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO tool VALUES ('$toDoStatus, $assignedVolunteerIndex, $taskDescription')";
-        command.Parameters.AddWithValue("$toDoStatus", toDoStatus, 
-        "$assignedVolunteerIndex", assignedVolunteerIndex, "$taskDescription", taskDescription);
+        command.CommandText = "INSERT INTO task (toDoStatus, assignedVolunteerIndex, taskDescription) VALUES ($toDoStatus, $assignedVolunteerIndex, $taskDescription)";
+        command.Parameters.AddWithValue("$toDoStatus", toDoStatus);
+        command.Parameters.AddWithValue("$assignedVolunteerIndex", assignedVolunteerIndex);
+        command.Parameters.AddWithValue("$taskDescription", taskDescription);
+
+        command.ExecuteNonQuery();
     }
-    
-    // delete
 
-
-    static void deleteGarderner(int index)
+    public static void deleteGarderner(int index)
     {
-        using var connection = newSqliteConnection(ConnectionString);
+        using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
 
         using var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM garderner WHERE id = $index)";
+        command.CommandText = "DELETE FROM garderner WHERE id = $index"; 
         command.Parameters.AddWithValue("$index", index);
+
+        command.ExecuteNonQuery();
     }
 
-    static void deleteSudo(int index)
+    public static void deleteSudo(int index)
     {
-        using var connection = newSqliteConnection(ConnectionString);
+        using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
 
         using var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM sudo WHERE id = $index)";
+        command.CommandText = "DELETE FROM sudo WHERE id = $index";
         command.Parameters.AddWithValue("$index", index);
+
+        command.ExecuteNonQuery();
     }
 
-    static void deleteVolunteer(int index)
+    public static void deleteVolunteer(int index)
     {
-        using var connection = newSqliteConnection(ConnectionString);
+        using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
 
         using var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM volunteer WHERE id = $index)";
+        command.CommandText = "DELETE FROM volunteer WHERE id = $index";
         command.Parameters.AddWithValue("$index", index);
+
+        command.ExecuteNonQuery();
     }
 
-    static void deletePlot(int index)
+    public static void deletePlot(int index)
     {
-        using var connection = newSqliteConnection(ConnectionString);
+        using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
 
         using var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM plot WHERE id = $index)";
+        command.CommandText = "DELETE FROM plot WHERE id = $index";
         command.Parameters.AddWithValue("$index", index);
+
+        command.ExecuteNonQuery();
     }
 
-    static void deleteTask(int index)
+    public static void deleteTask(int index)
     {
-        using var connection = newSqliteConnection(ConnectionString);
+        using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
 
         using var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM task WHERE id = $index)";
+        command.CommandText = "DELETE FROM task WHERE id = $index";
         command.Parameters.AddWithValue("$index", index);
+
+        command.ExecuteNonQuery();
     }
 
-    static void deleteTool(int index)
+    public static void deleteTool(int index)
     {
-        using var connection = newSqliteConnection(ConnectionString);
+        using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
 
         using var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM tool WHERE id = $index)";
+        command.CommandText = "DELETE FROM tool WHERE id = $index";
         command.Parameters.AddWithValue("$index", index);
+
+        command.ExecuteNonQuery();
     }
 
-    //update
-
-
-    static void updateGarderner(int index, bool toolUsing, bool plotOwn, int toolUsingIndex, int plotOwnIndex, string name)
+    public static void updateGarderner(int index, bool toolUsing, bool plotOwn, int toolUsingIndex, int plotOwnIndex, string name)
     {
-        using var connection = newSqliteConnection(ConnectionString);
+        using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
 
         using var command = connection.CreateCommand();
-
         command.CommandText = @"
-        UPDTATE garderner 
+        UPDATE garderner 
         SET toolUsing = $toolUsing, 
             plotOwn = $plotOwn, 
             toolUsingIndex = $toolUsingIndex, 
             plotOwnIndex = $plotOwnIndex, 
-            name = $name,
-        WHERE id = $index;";
+            name = $name
+        WHERE id = $index;"; 
 
-        command.Parameters.AddWithValue("$toolUsing", toolUsing, "$plotOwn", plotOwn, 
-        "$toolUsingIndex", toolUsingIndex, "$plotOwnIndex", plotOwnIndex, "$name", Name, "#index", index);
+        command.Parameters.AddWithValue("$toolUsing", toolUsing);
+        command.Parameters.AddWithValue("$plotOwn", plotOwn);
+        command.Parameters.AddWithValue("$toolUsingIndex", toolUsingIndex);
+        command.Parameters.AddWithValue("$plotOwnIndex", plotOwnIndex);
+        command.Parameters.AddWithValue("$name", name);
+        command.Parameters.AddWithValue("$index", index); 
+
+        command.ExecuteNonQuery();
     }
 
-     static void updateVolunteer(int index, int task, string name)
+    public static void updateVolunteer(int index, int task, string name)
     {
-        using var connection = newSqliteConnection(ConnectionString);
+        using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
 
         using var command = connection.CreateCommand();
         command.CommandText = @"
         UPDATE volunteer 
         SET task = $task, 
-        name = $name,
+            name = $name
         WHERE id = $index;";
 
-        command.Parameters.AddWithValue("$task", task, "$name", Name, "#index", index);
+        command.Parameters.AddWithValue("$task", task);
+        command.Parameters.AddWithValue("$name", name);
+        command.Parameters.AddWithValue("$index", index);
+
+        command.ExecuteNonQuery();
     }
 
-    static void updateSudo(string password, string name)
+    public static void updateSudo(string password, string name, int index) 
     {
-        using var connection = newSqliteConnection(ConnectionString);
+        using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
 
         using var command = connection.CreateCommand();
         command.CommandText = @"
         UPDATE sudo
         SET password = $password,
-        name = $name,
+            name = $name
         WHERE id = $index;"; 
         
-        command.Parameters.AddWithValue("$password", password, "$name", Name, "$index", index);
+        command.Parameters.AddWithValue("$password", password);
+        command.Parameters.AddWithValue("$name", name);
+        command.Parameters.AddWithValue("$index", index);
+
+        command.ExecuteNonQuery();
     }
 
-    static void updatePlot(int location, bool inUse, int ownerGardernerIndex, string plotDescription, int index)
+    public static void updatePlot(int location, bool inUse, int ownerGardernerIndex, string plotDescription, int index)
     {
-        using var connection = newSqliteConnection(ConnectionString);
+        using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
 
         using var command = connection.CreateCommand();
         command.CommandText = @"
         UPDATE plot 
         SET location = $location,
-        inUse = $inUse, 
-        ownerGardenIndex = $ownerGardernerIndex,
-        plotDescription = $plotDescription'
-        )";
+            inUse = $inUse, 
+            ownerGardernerIndex = $ownerGardernerIndex,
+            plotDescription = $plotDescription
+        WHERE id = $index;";
 
-        command.Parameters.AddWithValue("$location", location, "$inUse", inUse, 
-        "$ownerGardernerIndex", ownerGardernerIndex, "$plotDescription", plotDescription, "$index", index);
+        command.Parameters.AddWithValue("$location", location);
+        command.Parameters.AddWithValue("$inUse", inUse);
+        command.Parameters.AddWithValue("$ownerGardernerIndex", ownerGardernerIndex);
+        command.Parameters.AddWithValue("$plotDescription", plotDescription);
+        command.Parameters.AddWithValue("$index", index);
+
+        command.ExecuteNonQuery();
     }
 
-    static void updateTool(bool inUse, int usingGardernerIndex, string toolDescription, int index)
+    public static void updateTool(bool inUse, int usingGardernerIndex, string toolDescription, int index)
     {
-        using var connection = newSqliteConnection(ConnectionString);
+        using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
 
         using var command = connection.CreateCommand();
-
         command.CommandText = @"
         UPDATE tool 
         SET inUse = $inUse,
-        usingGardernerIndex = $usingGardernerIndex, 
-        toolDescription = $toolDescription,
-        WHERE id = $index;)";
+            usingGardernerIndex = $usingGardernerIndex, 
+            toolDescription = $toolDescription
+        WHERE id = $index;";
 
-    
-        command.Parameters.AddWithValue("$inUse", inUse, 
-        "$usingGardernerIndex", usingGardernerIndex, "$toolDescription", toolDescription, "$index", index);
+        command.Parameters.AddWithValue("$inUse", inUse);
+        command.Parameters.AddWithValue("$usingGardernerIndex", usingGardernerIndex);
+        command.Parameters.AddWithValue("$toolDescription", toolDescription);
+        command.Parameters.AddWithValue("$index", index);
+
+        command.ExecuteNonQuery();
     }
 
-    static void updateTask(bool toDoStatus, int assignedVolunteerIndex, string taskDescription, int index)
+    public static void updateTask(bool toDoStatus, int assignedVolunteerIndex, string taskDescription, int index)
     {
-        using var connection = newSqliteConnection(ConnectionString);
+        using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
 
         using var command = connection.CreateCommand();
         command.CommandText = @"
         UPDATE task
         SET toDoStatus = $toDoStatus,
-        assignedVolunteerIndex = $assignedVolunteerIndex,
-        taskDescription = $taskDescription,
-        WHERE id = $index;
-        )";
-        command.Parameters.AddWithValue("$toDoStatus", toDoStatus, 
-        "$assignedVolunteerIndex", assignedVolunteerIndex, "$taskDescription", taskDescription, "$index", index);
+            assignedVolunteerIndex = $assignedVolunteerIndex,
+            taskDescription = $taskDescription
+        WHERE id = $index;";
+        
+        command.Parameters.AddWithValue("$toDoStatus", toDoStatus);
+        command.Parameters.AddWithValue("$assignedVolunteerIndex", assignedVolunteerIndex);
+        command.Parameters.AddWithValue("$taskDescription", taskDescription);
+        command.Parameters.AddWithValue("$index", index);
+
+        command.ExecuteNonQuery();
     }
-
-
 }

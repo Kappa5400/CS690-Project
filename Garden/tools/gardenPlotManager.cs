@@ -1,11 +1,12 @@
 namespace Garden;
 using Spectre.Console;
+using System;
 
 public class gardenPlotManager
 {
 
 
-    public void start()
+    public static void start()
     {
         string command;
 
@@ -20,22 +21,23 @@ public class gardenPlotManager
 
                 if (command == "view open plots")
                 {
-                    DB.gardenPlotManager.getOpenPlots();
+                    gardenPlotManagerDB.getOpenPlots();
                 }
                 else if (command == "view plot of garderner by index")
                 {
-                    int res = AskForInput("Enter index of garderner to look up");
-                    DB.gardenPlotManager.getPlotViaGarderner();
+                    int res = int.Parse(AskForInput("Enter index of garderner to look up: ") ?? "0");
+                    
+                    gardenPlotManagerDB.getPlotViaGarderner(res);
                 }
                 else if (command == "back")
                 {
-                    ConsoleUI.show();
+                    ConsoleUI.Show();
                 } 
         } while(command!="end");
     }
     public static string AskForInput(string message) {
         Console.Write(message);
-        return Console.ReadLine();
+        return Console.ReadLine() ?? string.Empty;
     }
 
 }

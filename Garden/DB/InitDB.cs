@@ -7,17 +7,17 @@ using System;
 // init db functions, create empty tables
 // sql schemas setup
 
-class InitDB{
-    private const string ConnectionString = "Data Source=garden.db";
+public class InitDB{
+    public const string ConnectionString = "Data Source=garden.db";
 
-    static void Main(string[] args)
+    static void migrate(string[] args)
     {
         init();
     }
 
-    static void init()
+    public static void init()
     {
-        InitializeDatabase();
+      
         initGardernerTable();
         initVolunteerTable();
         initSudoTable();
@@ -26,16 +26,14 @@ class InitDB{
         initPlotTable();
     }
 
-    static void InitializeDatabase()
-    {
-        using var connection = new SqliteConnection(ConnectionString);
-        connection.Open();
-    }
+
 
 
     static void initGardernerTable()
     {
-        var createUserTable = connectionCreateCommand();
+        using var connection = new SqliteConnection(ConnectionString);
+        connection.Open();
+        var createGardernerTable = connection.CreateCommand();
         createGardernerTable.CommandText =
         @"
         CREATE TABLE IF NOT EXISTS garderner (
@@ -47,12 +45,15 @@ class InitDB{
             name STRING
         );
         ";
-        createGardernerTable.ExcecuteNonQuery();
+        createGardernerTable.ExecuteNonQuery();
     }
 
     static void initVolunteerTable()
     {
-        var createVolunteerTable = connectionCreateCommand();
+        using var connection = new SqliteConnection(ConnectionString);
+        connection.Open();
+
+        var createVolunteerTable = connection.CreateCommand();
         createVolunteerTable.CommandText =
         @"
         CREATE TABLE IF NOT EXISTS volunteer (
@@ -61,12 +62,15 @@ class InitDB{
             name STRING
         );
         ";
-        createVolunteerTable.ExcecuteNonQuery();
+        createVolunteerTable.ExecuteNonQuery();
     }
 
     static void initSudoTable()
     {
-        var createSudoTable = connectionCreateCommand();
+        using var connection = new SqliteConnection(ConnectionString);
+        connection.Open();
+
+        var createSudoTable = connection.CreateCommand();
         createSudoTable.CommandText =
         @"
         CREATE TABLE IF NOT EXISTS sudo (
@@ -75,12 +79,15 @@ class InitDB{
             name STRING
         );
         ";
-        createSudoTable.ExcecuteNonQuery();
+        createSudoTable.ExecuteNonQuery();
     }
 
     static void initPlotTable()
     {
-        var createPlotTable = connectionCreateCommand();
+        using var connection = new SqliteConnection(ConnectionString);
+        connection.Open();
+
+        var createPlotTable = connection.CreateCommand();
         createPlotTable.CommandText =
         @"
         CREATE TABLE IF NOT EXISTS plot (
@@ -91,12 +98,15 @@ class InitDB{
             plotDescription STRING
         );
         ";
-        createSudoTable.ExcecuteNonQuery();
+        createPlotTable.ExecuteNonQuery();
     }
 
     static void initToolTable()
     {
-        var createToolTable = connectionCreateCommand();
+        using var connection = new SqliteConnection(ConnectionString);
+        connection.Open();
+
+        var createToolTable = connection.CreateCommand();
         createToolTable.CommandText =
         @"
         CREATE TABLE IF NOT EXISTS tool (
@@ -106,12 +116,15 @@ class InitDB{
             toolDescription STRING
         );
         ";
-        createToolTable.ExcecuteNonQuery();
+        createToolTable.ExecuteNonQuery();
     }
 
     static void initTaskTable()
     {
-        var createTaskTable = connectionCreateCommand();
+        using var connection = new SqliteConnection(ConnectionString);
+        connection.Open();
+
+        var createTaskTable = connection.CreateCommand();
         createTaskTable.CommandText =
         @"
         CREATE TABLE IF NOT EXISTS task (
@@ -121,7 +134,7 @@ class InitDB{
             taskDescription String
         );
         ";
-        createTaskTable.ExcecuteNonQuery();
+        createTaskTable.ExecuteNonQuery();
     }
 
     

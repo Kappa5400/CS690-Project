@@ -3,67 +3,64 @@ namespace Garden;
 using Microsoft.Data.Sqlite;
 using System;
 
-class gardenPlotManagerDB(){
-    
-    static void getOpenPlots()
+
+public class gardenPlotManagerDB
+{
+
+    public static void getOpenPlots()
     {
-        using var connection = newSqliteConnection(ConnectionString);
+        using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
 
         using var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM plot WHERE inUse = false;";
-        using var reader = command.ExcecuteReader();
+        command.CommandText = "SELECT * FROM plot WHERE inUse = 0;"; 
+        using var reader = command.ExecuteReader(); 
 
-         while (reader.Read())
+        while (reader.Read())
         {
             long id = reader.GetInt64(0);
-            bool toolUsing = reader.GetBool(1);
-            bool plotOwn = reader.GetBool(2);
-            int toolUsingIndex = reader.GetInt64(3);
-            int plotOwnIndex = reader.GetInt64(4);
-            string name = reader.GetString(5);
+            int location = reader.GetInt32(1);
+            bool inUse = reader.GetBoolean(2); // 4. Fixed GetBool -> GetBoolean
+            int ownerGardenerIndex = reader.GetInt32(3);
+            string plotDescription = reader.GetString(4);
+
             Console.WriteLine($@"ID: {id}
-            Name: {name}
-            Using a tool currently: {toolUsing}
-            Owns a plot: {plotOwn}
-            Index of tool if using: {toolUsingIndex}
-            Index of plot if own: {plotOwnIndex}
-            \n
+            Location: {location}
+            Is Plot In Use: {inUse}
+            Owner Gardener Index: {ownerGardenerIndex}
+            Description: {plotDescription}
             ");
         }
-
-
     }
 
-    static void getPlotViaGarderner(int index)
+
+    public static void getPlotViaGarderner(int index)
     {
-        using var connection = newSqliteConnection(ConnectionString);
+        using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
 
         using var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM plot WHERE id = $index;";
+       
+        command.CommandText = "SELECT * FROM plot WHERE ownerGardernerIndex = $index;";
         command.Parameters.AddWithValue("$index", index);
         
-        using var reader = command.ExcecuteReader();
+        using var reader = command.ExecuteReader(); 
 
-         while (reader.Read())
+        while (reader.Read())
         {
+            
             long id = reader.GetInt64(0);
-            bool toolUsing = reader.GetBool(1);
-            bool plotOwn = reader.GetBool(2);
-            int toolUsingIndex = reader.GetInt64(3);
-            int plotOwnIndex = reader.GetInt64(4);
-            string name = reader.GetString(5);
-            Console.WriteLine($@"ID: {id}
-            Name: {name}
-            Using a tool currently: {toolUsing}
-            Owns a plot: {plotOwn}
-            Index of tool if using: {toolUsingIndex}
-            Index of plot if own: {plotOwnIndex}
-            \n
+            int location = reader.GetInt32(1);
+            bool inUse = reader.GetBoolean(2);
+            int ownerGardenerIndex = reader.GetInt32(3);
+            string plotDescription = reader.GetString(4);
+
+            Console.WriteLine($@"Plot ID: {id}
+            Location: {location}
+            Is Plot In Use: {inUse}
+            Owner Gardener Index: {ownerGardenerIndex}
+            Description: {plotDescription}
             ");
         }
     }
-
-
 }

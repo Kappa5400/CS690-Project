@@ -11,7 +11,7 @@ public class ConsoleUI {
         // init object on consoleui init here
     }
 
-    public void Show() {
+    public static void Show() {
         
         var user = AnsiConsole.Prompt(
 				            new SelectionPrompt<string>()
