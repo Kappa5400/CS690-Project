@@ -28,8 +28,7 @@ public class crud
 
         else if(command == "Plot")
         {
-            //to impliment
-            return;
+            plotCrud();
         }
 
         else if (command == "Users")
@@ -81,17 +80,17 @@ public class crud
             if (userType == 1)
             {
                 selectDB.getAllGarderner();
-                crudManager();
+                return;
             }
             if (userType == 2)
             {
                 selectDB.getAllVolunteer();
-                crudManager();
+                return;
             }
             if (userType == 3)
             {
                 selectDB.getAllSudo();
-                crudManager();
+                return;
             }
         }
         else if (crudCommand == "View one")
@@ -101,17 +100,17 @@ public class crud
             if (userType == 1)
             {
                 selectDB.getGardernerViaIndex(index);
-                crudManager();
+                return;
             }
             if (userType == 2)
             {
                 selectDB.getVolunteerViaIndex(index);
-                crudManager();
+                return;
             }
             if (userType == 3)
             {
                 selectDB.getSudoViaIndex(index);
-                crudManager();
+                return;
             }
         }
         else if (crudCommand == "Create")
@@ -159,7 +158,7 @@ public class crud
                 string password = AskForInput("Enter sudo password: ");
                 string name = AskForInput("Enter sudo name: ");
                 helperDB.createSudo(password, name); 
-                crudManager();
+                return;
             }
         }
         else if (crudCommand == "Update")
@@ -174,17 +173,17 @@ public class crud
             if (userType == 1)
             {
                 helperDB.deleteGarderner(index);
-                crudManager();
+                return;
             }
             if (userType == 2)
             {
                 helperDB.deleteVolunteer(index);
-                crudManager();
+                return;
             }
             if (userType == 3)
             {
                 helperDB.deleteSudo(index);
-                crudManager();
+                return;
             }
         }
         else if (crudCommand == "Back")
@@ -192,6 +191,94 @@ public class crud
             return;
         }
     }
+    public static void plotCrud()
+    {
+        var crudPrompt = new SelectionPrompt<string>()
+        .Title("Select an option")
+        .AddChoices(new[]
+        {
+            "View all", "View one", "Create", "Update", "Delete", "Back"
+        });
+    
+        var crudCommand = AnsiConsole.Prompt(crudPrompt);
+
+        if (crudCommand == "View all")
+        {
+            
+                selectDB.getAllPlots();
+                return;
+        }
+        
+        else if (crudCommand == "View one")
+        {
+            int index = int.Parse(AskForInput("Select index: ") ?? "0");
+            
+            
+            {
+                selectDB.getPlotViaIndex(index);
+                return;
+            }
+            
+        }
+        else if (crudCommand == "Create")
+        {
+
+            {
+              
+                int location = 0;
+                bool inUse = false;
+                int ownderGardernerIndex = 0;
+                string plotDescription = ""; 
+
+                string plotlUsingStr = AskForInput("Enter 1 if garderner is using the plot or 0 if they are not: ");
+                if(plotlUsingStr == "1")
+                {
+                    inUse = true;
+                }
+                else
+                {
+                    inUse = false;
+                }
+
+               
+                location = int.Parse(AskForInput("Enter plot location (integer): ") ?? "0");
+                
+
+                
+
+                if (inUse)
+                {
+                    plotDescription = (AskForInput("Enter description of plot: "));
+                }
+
+                
+                
+                // Pass value or fallback fallback values if missing
+                helperDB.createPlot(location, inUse, ownderGardernerIndex, plotDescription);
+                return;
+            }
+           
+        }
+        else if (crudCommand == "Update")
+        {
+            int index = int.Parse(AskForInput("Select index: ") ?? "0");
+            // To implement update logic
+        }
+        else if (crudCommand == "Delete")
+        {
+            int index = int.Parse(AskForInput("Select index to delete: ") ?? "0");
+            
+            helperDB.deletePlot(index);
+            return;
+            
+        }
+
+        else if (crudCommand == "Back")
+        {
+            return;
+        }
+    }
+    
     
     public static string AskForInput(string message) 
     {

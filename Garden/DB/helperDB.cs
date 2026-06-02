@@ -51,7 +51,7 @@ public class helperDB
         command.ExecuteNonQuery();
     }
 
-    public static void creatPlot(int location, bool inUse, int ownerGardernerIndex, string plotDescription)
+    public static void createPlot(int location, bool inUse, int ownerGardernerIndex, string plotDescription)
     {
         using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
