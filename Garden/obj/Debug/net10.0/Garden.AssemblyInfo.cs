@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Garden")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e1b5cad7875083212bc0a39fdd0b529968fdbe4f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+41a8e96a908f2a368adbb7364c148ba459d4554c")]
 [assembly: System.Reflection.AssemblyProductAttribute("Garden")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Garden")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

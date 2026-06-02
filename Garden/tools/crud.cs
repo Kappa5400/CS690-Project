@@ -142,7 +142,15 @@ public class crud
                 string name = AskForInput("Enter garderner name: ");
                 
                 // Pass value or fallback fallback values if missing
-                helperDB.createGarderner(toolUsing, plotOwn, toolUsingIndex ?? 0, plotOwnIndex ?? 0, name);
+                int newGardernerIndex = helperDB.createGarderner(toolUsing, plotOwn, toolUsingIndex ?? 0, plotOwnIndex ?? 0, name);
+
+                if (plotOwn)
+                {
+                    (long id, int oldLocation, bool oldInUse, int oldOwnerGardenerIndex, string oldPlotDescription) = selectDB.getPlotViaIndex(plotOwnIndex ?? 0);
+                    helperDB.updatePlot((int)id, oldLocation, true, (int)newGardernerIndex, oldPlotDescription);
+                }
+
+
                 return;
             }
             // volunteer

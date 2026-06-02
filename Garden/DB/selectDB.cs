@@ -264,7 +264,7 @@ public class selectDB{
         }
     }
 
-    public static void getPlotViaIndex(int index)
+    public static (long id, int location, bool inUse, int ownerGardenerIndex, string plotDescription) getPlotViaIndex(int index)
     {
         using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
@@ -296,6 +296,8 @@ public class selectDB{
             Owner's garderner index: {ownerGardenerIndex}
             Description: {plotDescription}
             ");
+
+        return (id, (int)location, inUse, (int)ownerGardenerIndex, plotDescription);
     }
 
     public static void getAllTools()

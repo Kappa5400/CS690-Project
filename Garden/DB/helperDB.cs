@@ -6,14 +6,14 @@ using System;
 public class helperDB
 {
   
-    public static void createGarderner(bool toolUsing, bool plotOwn, int toolUsingIndex, int plotOwnIndex, string name)
+    public static int createGarderner(bool toolUsing, bool plotOwn, int toolUsingIndex, int plotOwnIndex, string name)
     {
         using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
 
         using var command = connection.CreateCommand();
         
-        command.CommandText = "INSERT INTO garderner (toolUsing, plotOwn, toolUsingIndex, plotOwnIndex, name) VALUES ($toolUsing, $plotOwn, $toolUsingIndex, $plotOwnIndex, $name)";
+        command.CommandText = "INSERT INTO garderner (toolUsing, plotOwn, toolUsingIndex, plotOwnIndex, name) VALUES ($toolUsing, $plotOwn, $toolUsingIndex, $plotOwnIndex, $name); SELECT last_insert_rowid();";
         
     
         command.Parameters.AddWithValue("$toolUsing", toolUsing);
@@ -22,7 +22,10 @@ public class helperDB
         command.Parameters.AddWithValue("$plotOwnIndex", plotOwnIndex);
         command.Parameters.AddWithValue("$name", name); 
 
-        command.ExecuteNonQuery(); 
+        long newId = (long)command.ExecuteScalar();
+
+        return (int)newId;
+        
     }
 
     public static void createVolunteer(int task, string name)
@@ -232,7 +235,7 @@ public class helperDB
         command.ExecuteNonQuery();
     }
 
-    public static void updatePlot(int location, bool inUse, int ownerGardernerIndex, string plotDescription, int index)
+    public static void updatePlot(int index, int location, bool inUse, int ownerGardernerIndex, string plotDescription)
     {
         using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
