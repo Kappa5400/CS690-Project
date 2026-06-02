@@ -3,13 +3,11 @@ namespace Garden;
 using Microsoft.Data.Sqlite;
 using System;
 
-// 1. Class must be public to be accessed from tools/crud.cs
 public class selectDB{
 
-    // 2. All methods changed to 'public static' so they are universally accessible
-    public static void getGardernerViaIndex(int index)
+    public static (long id, bool toolUsing, bool plotOwn, int toolUsingIndex, int plotOwnIndex, string name) getGardernerViaIndex(int index)
+    
     {
-        // Fixed: Use standard SqliteConnection class
         using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
 
@@ -22,18 +20,30 @@ public class selectDB{
         long id = 0;
         int task = 0;
         string name = string.Empty;
+        bool plotOwn = false;
+        int toolUsingIndex = 0;
+        int plotOwnIndex = 0;
+        bool toolUsing = false;
 
         while (reader.Read())
         {
             id = reader.GetInt64(0);
-            task = reader.GetInt32(1);
-            name = reader.GetString(2);
+            toolUsing = reader.GetBoolean(1);
+            plotOwn = reader.GetBoolean(2);   
+            toolUsingIndex = reader.GetInt32(3);
+            plotOwnIndex = reader.GetInt32(4);
+            name = reader.GetString(5);
+           
         }
 
         Console.WriteLine($@"ID: {id}
-            Name: {name}
-            Assigned task: {task}
+            Using a tool currently: {toolUsing}
+            Owns a plot: {plotOwn}
+            Index of tool if using: {toolUsingIndex}
+            Index of plot if own: {plotOwnIndex}
             ");
+
+        return  (id, toolUsing, plotOwn, toolUsingIndex, plotOwnIndex, name);
     }
 
     public static void getAllGarderner()
@@ -49,8 +59,8 @@ public class selectDB{
         while (reader.Read())
         {
             long id = reader.GetInt64(0);
-            bool toolUsing = reader.GetBoolean(1); // Fixed: GetBool -> GetBoolean
-            bool plotOwn = reader.GetBoolean(2);   // Fixed: GetBool -> GetBoolean
+            bool toolUsing = reader.GetBoolean(1);
+            bool plotOwn = reader.GetBoolean(2);   
             int toolUsingIndex = reader.GetInt32(3);
             int plotOwnIndex = reader.GetInt32(4);
             string name = reader.GetString(5);
@@ -78,7 +88,7 @@ public class selectDB{
         {
             long id = reader.GetInt64(0);
             long task = reader.GetInt64(1);
-            string name = reader.GetString(2); // Fixed: Casing mismatch from 'Name' to 'name'
+            string name = reader.GetString(2); 
             Console.WriteLine($@"ID: {id}
             Name: {name}
             Assigned task number: {task}
@@ -114,12 +124,11 @@ public class selectDB{
         connection.Open();
 
         using var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM volunteer WHERE id = $index"; // Fixed table typo 'volunteere'
+        command.CommandText = "SELECT * FROM volunteer WHERE id = $index"; 
         command.Parameters.AddWithValue("$index", index);
 
         using var reader = command.ExecuteReader();
 
-        // Fixed: Variables declared outside the loop block so Console.WriteLine can see them
         long id = 0;
         bool toolUsing = false;
         bool plotOwn = false;
@@ -130,8 +139,8 @@ public class selectDB{
         while (reader.Read())
         {
             id = reader.GetInt64(0);
-            toolUsing = reader.GetBoolean(1); // Fixed type mapping
-            plotOwn = reader.GetBoolean(2);   // Fixed type mapping
+            toolUsing = reader.GetBoolean(1); 
+            plotOwn = reader.GetBoolean(2);   
             toolUsingIndex = reader.GetInt32(3);
             plotOwnIndex = reader.GetInt32(4);
             name = reader.GetString(5);
@@ -157,7 +166,7 @@ public class selectDB{
 
         using var reader = command.ExecuteReader();
 
-        // Fixed variable declaration scope
+      
         long id = 0;
         string password = string.Empty;
         string name = string.Empty;
@@ -181,14 +190,14 @@ public class selectDB{
         connection.Open();
 
         using var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM task"; // Fixed: Removed broken parameter allocation
+        command.CommandText = "SELECT * FROM task"; 
 
         using var reader = command.ExecuteReader();
 
         while (reader.Read())
         {
             long id = reader.GetInt64(0);
-            bool toDoStatus = reader.GetBoolean(1); // Fixed: GetBool -> GetBoolean
+            bool toDoStatus = reader.GetBoolean(1); 
             int assignedVolunteerIndex = reader.GetInt32(2);
             string taskDescription = reader.GetString(3);
             Console.WriteLine($@"ID: {id}
@@ -201,7 +210,7 @@ public class selectDB{
 
     public static void getTaskViaIndex(int index)
     {
-        using var connection = new SqliteConnection(InitDB.ConnectionString); // Fixed instantiator
+        using var connection = new SqliteConnection(InitDB.ConnectionString);  
         connection.Open();
 
         using var command = connection.CreateCommand();
@@ -218,7 +227,7 @@ public class selectDB{
         while (reader.Read())
         {
             id = reader.GetInt64(0);
-            toDoStatus = reader.GetBoolean(1); // Fixed: GetBool -> GetBoolean
+            toDoStatus = reader.GetBoolean(1); 
             assignedVolunteerIndex = reader.GetInt32(2);
             taskDescription = reader.GetString(3);
         }
@@ -243,7 +252,7 @@ public class selectDB{
         {
             long id = reader.GetInt64(0);
             int location = reader.GetInt32(1);
-            bool inUse = reader.GetBoolean(2); // Fixed: GetBool -> GetBoolean
+            bool inUse = reader.GetBoolean(2); 
             int ownerGardenerIndex = reader.GetInt32(3);
             string plotDescription = reader.GetString(4);
             Console.WriteLine($@"ID: {id}
@@ -276,7 +285,7 @@ public class selectDB{
         {
             id = reader.GetInt64(0);
             location = reader.GetInt64(1);
-            inUse = reader.GetBoolean(2); // Fixed: GetBool -> GetBoolean
+            inUse = reader.GetBoolean(2); 
             ownerGardenerIndex = reader.GetInt64(3);
             plotDescription = reader.GetString(4); 
         }
@@ -302,12 +311,12 @@ public class selectDB{
         while (reader.Read())
         {
             long id = reader.GetInt64(0);
-            bool inUse = reader.GetBoolean(1); // Fixed: GetBool -> GetBoolean
+            bool inUse = reader.GetBoolean(1); 
             int usingGardernerIndex = reader.GetInt32(2);
             string toolDescription = reader.GetString(3);
             Console.WriteLine($@"ID: {id}
             In use: {inUse}
-            Using garderner's index: {usingGardernerIndex} // Fixed field mismatch
+            Using garderner's index: {usingGardernerIndex} 
             Description: {toolDescription}
             ");
         }
@@ -332,14 +341,14 @@ public class selectDB{
         while (reader.Read())
         {
             id = reader.GetInt64(0);
-            inUse = reader.GetBoolean(1); // Fixed: GetBool -> GetBoolean
+            inUse = reader.GetBoolean(1); 
             usingGardernerIndex = reader.GetInt64(2);
             toolDescription = reader.GetString(3);
         }
 
         Console.WriteLine($@"ID: {id}
             In use: {inUse}
-            Using garderner's index: {usingGardernerIndex} // Fixed field mismatch
+            Using garderner's index: {usingGardernerIndex}
             Description: {toolDescription}
             ");
     }

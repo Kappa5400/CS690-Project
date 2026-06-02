@@ -1,6 +1,7 @@
 namespace Garden;
 using Spectre.Console;
 using System;
+using System.Data.Common;
 
 public class crud
 {
@@ -227,7 +228,7 @@ public class crud
               
                 int location = 0;
                 bool inUse = false;
-                int ownderGardernerIndex = 0;
+                int ownerGardernerIndex = 0;
                 string plotDescription = ""; 
 
                 string plotlUsingStr = AskForInput("Enter 1 if garderner is using the plot or 0 if they are not: ");
@@ -243,18 +244,21 @@ public class crud
                
                 location = int.Parse(AskForInput("Enter plot location (integer): ") ?? "0");
                 
-
-                
-
                 if (inUse)
                 {
-                    plotDescription = (AskForInput("Enter description of plot: "));
+                    ownerGardernerIndex = int.Parse(AskForInput("Enter index of garderner that owns plot: ") ?? "0");
+                    plotDescription = AskForInput("Enter description of plot: ");
                 }
+                
+                
+                long newId = helperDB.createPlot(location, inUse, ownerGardernerIndex, plotDescription);
 
-                
-                
-                // Pass value or fallback fallback values if missing
-                helperDB.createPlot(location, inUse, ownderGardernerIndex, plotDescription);
+                //update garderner
+                if (inUse)
+                {
+                    var (id, oldToolUsing, oldPlotOwn, oldToolUsingIndex, oldPlotID, oldName) = selectDB.getGardernerViaIndex(ownerGardernerIndex);
+                    helperDB.updateGarderner((int)id, oldToolUsing, oldPlotOwn, oldToolUsingIndex, (int)newId, oldName);
+                }
                 return;
             }
            

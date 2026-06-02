@@ -51,19 +51,22 @@ public class helperDB
         command.ExecuteNonQuery();
     }
 
-    public static void createPlot(int location, bool inUse, int ownerGardernerIndex, string plotDescription)
+    public static long createPlot(int location, bool inUse, int ownerGardernerIndex, string plotDescription)
     {
         using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
 
         using var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO plot (location, inUse, ownerGardernerIndex, plotDescription) VALUES ($location, $inUse, $ownerGardernerIndex, $plotDescription)";
+        command.CommandText = "INSERT INTO plot (location, inUse, ownerGardernerIndex, plotDescription) VALUES ($location, $inUse, $ownerGardernerIndex, $plotDescription); SELECT last_insert_rowid();";
+    
         command.Parameters.AddWithValue("$location", location);
         command.Parameters.AddWithValue("$inUse", inUse);
         command.Parameters.AddWithValue("$ownerGardernerIndex", ownerGardernerIndex);
         command.Parameters.AddWithValue("$plotDescription", plotDescription);
 
-        command.ExecuteNonQuery();
+        long newId = (long)command.ExecuteScalar();
+
+        return newId;
     }
 
     public static void creatTool(bool inUse, int usingGardernerIndex, string toolDescription)
