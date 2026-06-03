@@ -114,6 +114,11 @@ public class helperDB
 
     public static void deleteSudo(int index)
     {
+        //index 0 is the sudo, don't want to delete
+        if (index == 0){
+            return;
+        }
+
         using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
 
@@ -234,6 +239,7 @@ public class helperDB
 
         command.ExecuteNonQuery();
     }
+
 
     public static void updatePlot(int index, int location, bool inUse, int ownerGardernerIndex, string plotDescription)
     {

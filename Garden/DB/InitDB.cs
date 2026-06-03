@@ -80,6 +80,11 @@ public class InitDB{
         );
         ";
         createSudoTable.ExecuteNonQuery();
+
+        var enterSudo = connection.CreateCommand();
+        enterSudo.CommandText = "INSERT INTO sudo (password, name) SELECT 'sudo', 'sudo' WHERE NOT EXISTS (SELECT 1 FROM sudo WHERE name = 'sudo');";
+
+        enterSudo.ExecuteNonQuery();
     }
 
     static void initPlotTable()

@@ -155,7 +155,7 @@ public class selectDB{
             ");
     }
 
-    public static void getSudoViaIndex(int index)
+    public static (long id, string password, string name) getSudoViaIndex(int index)
     {
         using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
@@ -182,6 +182,33 @@ public class selectDB{
             Name: {name}
             Password: {password}
             ");
+        return (id, password, name);
+    }
+
+    public static (long id, string password, string name) getSudoViaName(string name)
+    {
+        using var connection = new SqliteConnection(InitDB.ConnectionString);
+        connection.Open();
+
+        using var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM sudo WHERE name = $name LIMIT 1";
+        command.Parameters.AddWithValue("$name", name);
+
+        using var reader = command.ExecuteReader();
+
+      
+        long id = 0;
+        string password = "";
+        string dbName = "";
+
+        while (reader.Read())
+        {
+            id = reader.GetInt64(0);
+            password = reader.GetString(1);
+            dbName = reader.GetString(2);
+        }
+
+        return (id, password, dbName);
     }
 
     public static void getAllTasks()

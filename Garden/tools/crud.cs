@@ -191,6 +191,11 @@ public class crud
             }
             if (userType == 3)
             {
+                // index 0 is sudo user sudo
+                if (index == 0){
+                    Console.WriteLine("Can't delete sudo user sudo");
+                    return;
+                }
                 helperDB.deleteSudo(index);
                 return;
             }

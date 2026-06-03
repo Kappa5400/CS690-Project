@@ -48,6 +48,12 @@ public class ConsoleUI {
             } else if(user=="Manager") {
 
             //to implement: password login method
+            bool res = Auth.start();
+            if (res == false)
+            {
+                Console.WriteLine("Incorrect login.");
+                return;
+            }
             string command;
 
             do {
