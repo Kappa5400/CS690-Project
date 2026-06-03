@@ -141,7 +141,7 @@ public class crud
 
                 string name = AskForInput("Enter garderner name: ");
                 
-                // Pass value or fallback fallback values if missing
+                
                 int newGardernerIndex = helperDB.createGarderner(toolUsing, plotOwn, toolUsingIndex ?? 0, plotOwnIndex ?? 0, name);
 
                 if (plotOwn)
@@ -255,10 +255,11 @@ public class crud
                 if (inUse)
                 {
                     ownerGardernerIndex = int.Parse(AskForInput("Enter index of garderner that owns plot: ") ?? "0");
-                    plotDescription = AskForInput("Enter description of plot: ");
+                    
                 }
                 
-                
+                plotDescription = AskForInput("Enter description of plot: ");
+
                 long newId = helperDB.createPlot(location, inUse, ownerGardernerIndex, plotDescription);
 
                 //update garderner
