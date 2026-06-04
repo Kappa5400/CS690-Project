@@ -16,12 +16,16 @@ public class gardenPlotManager
                                     .Title("Select option")
                                     .AddChoices(new[]
                                     {
-                                        "view open plots","view plot of garderner by index","back","end"
+                                        "view open plots", "view in use plots", "view plot of garderner by index","back","end"
                                     }));
 
                 if (command == "view open plots")
                 {
                     gardenPlotManagerDB.getOpenPlots();
+                }
+                else if (command == "view in use plots")
+                {
+                    gardenPlotManagerDB.getUsePlots();
                 }
                 else if (command == "view plot of garderner by index")
                 {
