@@ -11,7 +11,10 @@ public class Auth
     }
     public static bool CheckPassword(string inputName, string inputPassword)
     {
-        
+        if(inputName == "" || inputPassword== "")
+        {
+            return false;
+        }
 
         var (fetchID, matchPassword, matchName) = selectDB.getSudoViaName(inputName);
 
