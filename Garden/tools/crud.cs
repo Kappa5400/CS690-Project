@@ -32,6 +32,11 @@ public class crud
             plotCrud();
         }
 
+        else if(command == "Tools")
+        {
+            toolCrud();
+        }
+
         else if (command == "Users")
         {
             string userCommandUserTypeSelect;
@@ -148,6 +153,12 @@ public class crud
                 {
                     (long id, int oldLocation, bool oldInUse, int oldOwnerGardenerIndex, string oldPlotDescription) = selectDB.getPlotViaIndex(plotOwnIndex ?? 0);
                     helperDB.updatePlot((int)id, oldLocation, true, (int)newGardernerIndex, oldPlotDescription);
+
+                }
+                if (toolUsing)
+                {
+                    (long toolid, bool oldInUse, int oldOwnerGardenerIndex, string toolDesc) = selectDB.getToolsViaIndex(toolUsingIndex ?? 0);
+                    helperDB.updateTool((int)toolid, true, newGardernerIndex , toolDesc);
                 }
 
 
@@ -295,8 +306,99 @@ public class crud
         {
             return;
         }
-    }
+
     
+    }
+    public static void toolCrud()
+    {
+        var crudPrompt = new SelectionPrompt<string>()
+        .Title("Select an option")
+        .AddChoices(new[]
+        {
+            "View all", "View one", "Create", "Update", "Delete", "Back"
+        });
+    
+        var crudCommand = AnsiConsole.Prompt(crudPrompt);
+
+        if (crudCommand == "View all")
+        {
+            
+                selectDB.getAllTools();
+                return;
+        }
+        
+        else if (crudCommand == "View one")
+        {
+            int index = int.Parse(AskForInput("Select index: ") ?? "0");
+            
+            
+            {
+                selectDB.getToolsViaIndex(index);
+                return;
+            }
+            
+        }
+        else if (crudCommand == "Create")
+        {
+
+            {
+              
+               
+                bool inUse = false;
+                int usingGardernerIndex = 0;
+                string toolDescription = ""; 
+
+                string plotlUsingStr = AskForInput("Enter 1 if garderner is using the tool or 0 if they are not: ");
+                if(plotlUsingStr == "1")
+                {
+                    inUse = true;
+                }
+                else
+                {
+                    inUse = false;
+                }
+
+               
+                
+                if (inUse)
+                {
+                    usingGardernerIndex = int.Parse(AskForInput("Enter index of garderner that is using tool: "));
+                    
+                }
+               
+                toolDescription = AskForInput("Enter description of plot: ");
+
+                long newId = helperDB.createTool(inUse, usingGardernerIndex, toolDescription);
+
+                //update garderner
+                if (inUse)
+                {
+                    var (id, oldInUse, oldPlotOwn, oldToolIndex, oldPlotIndex, name) = selectDB.getGardernerViaIndex(usingGardernerIndex);
+                    helperDB.updateGarderner((int)id, true, oldPlotOwn, (int)newId, oldPlotIndex, name);
+                }
+                return;
+            }
+           
+        }
+        else if (crudCommand == "Update")
+        {
+            int index = int.Parse(AskForInput("Select index: ") ?? "0");
+            // To implement update logic
+        }
+        else if (crudCommand == "Delete")
+        {
+            int index = int.Parse(AskForInput("Select index to delete: ") ?? "0");
+            
+            helperDB.deletePlot(index);
+            return;
+            
+        }
+
+        else if (crudCommand == "Back")
+        {
+            return;
+        }
+    }
     
     public static string AskForInput(string message) 
     {

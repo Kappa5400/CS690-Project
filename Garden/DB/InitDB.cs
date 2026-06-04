@@ -122,6 +122,8 @@ public class InitDB{
         );
         ";
         createToolTable.ExecuteNonQuery();
+
+        
     }
 
     static void initTaskTable()

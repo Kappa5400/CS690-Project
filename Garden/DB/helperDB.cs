@@ -72,18 +72,19 @@ public class helperDB
         return newId;
     }
 
-    public static void creatTool(bool inUse, int usingGardernerIndex, string toolDescription)
+    public static long createTool(bool inUse, int usingGardernerIndex, string toolDescription)
     {
         using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
 
         using var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO tool (inUse, usingGardernerIndex, toolDescription) VALUES ($inUse, $usingGardernerIndex, $toolDescription)";
+        command.CommandText = "INSERT INTO tool (inUse, usingGardernerIndex, toolDescription) VALUES ($inUse, $usingGardernerIndex, $toolDescription); SELECT last_insert_rowid();";
         command.Parameters.AddWithValue("$inUse", inUse);
         command.Parameters.AddWithValue("$usingGardernerIndex", usingGardernerIndex);
         command.Parameters.AddWithValue("$toolDescription", toolDescription);
 
-        command.ExecuteNonQuery();
+        long id = (long)command.ExecuteScalar();
+        return id;
     }
 
     public static void creatTask(bool toDoStatus, int assignedVolunteerIndex, string taskDescription)
@@ -264,7 +265,7 @@ public class helperDB
         command.ExecuteNonQuery();
     }
 
-    public static void updateTool(bool inUse, int usingGardernerIndex, string toolDescription, int index)
+    public static void updateTool(int index, bool inUse, int usingGardernerIndex, string toolDescription)
     {
         using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();

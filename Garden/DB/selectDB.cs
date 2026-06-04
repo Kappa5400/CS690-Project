@@ -351,7 +351,7 @@ public class selectDB{
         }
     }
 
-    public static void getToolsViaIndex(int index)
+    public static (long id, bool inUse, int usingGardernerIndex, string toolDescription) getToolsViaIndex(int index)
     {
         using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
@@ -380,5 +380,8 @@ public class selectDB{
             Using garderner's index: {usingGardernerIndex}
             Description: {toolDescription}
             ");
+  
+    return ((int)id, inUse, (int)usingGardernerIndex, toolDescription);
     }
+
 }
