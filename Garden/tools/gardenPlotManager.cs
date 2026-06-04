@@ -16,7 +16,7 @@ public class gardenPlotManager
                                     .Title("Select option")
                                     .AddChoices(new[]
                                     {
-                                        "view open plots", "view in use plots", "view plot of garderner by index","back","end"
+                                        "view open plots", "view in use plots", "view plot of garderner by index","view location detail by location number","back","end"
                                     }));
 
                 if (command == "view open plots")
@@ -27,6 +27,11 @@ public class gardenPlotManager
                 {
                     gardenPlotManagerDB.getUsePlots();
                 }
+                else if (command == "view location detail by location number")
+            {
+                int res = int.Parse(AskForInput("Enter location number to look up: ") ?? "0");
+                gardenPlotManagerDB.getPlotViaLoc(res);
+            }
                 else if (command == "view plot of garderner by index")
                 {
                     int res = int.Parse(AskForInput("Enter index of garderner to look up: ") ?? "0");
