@@ -12,20 +12,20 @@ public class DbTest : IDisposable
 
     public DbTest()
     {
-        // 1. Force InitDB and helperDB to point to the shared RAM instance
+        
         InitDB.ConnectionString = SharedMemoryConnectionString;
 
-        // 2. Open the master connection to lock the database into RAM
+        
         MasterConn = new SqliteConnection(SharedMemoryConnectionString);
         MasterConn.Open();
 
-        // 3. Build the tables inside this shared memory space
+        
         InitDB.init(MasterConn);
     }
 
     public void Dispose()
     {
-        // Closing this master connection completely purges the database from RAM
+        
         MasterConn.Dispose();
     }
 }
