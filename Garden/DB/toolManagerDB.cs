@@ -7,7 +7,7 @@ using System;
 public class toolManagerDB
 {
 
-    public static void getUseTools()
+    public static bool getUseTools()
     {
         using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
@@ -29,10 +29,11 @@ public class toolManagerDB
             Description: {toolDescription}
             ");
         }
+        return true;
     }
 
 
-    public static void getOpenTools()
+    public static bool getOpenTools()
     {
         using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
@@ -57,5 +58,8 @@ public class toolManagerDB
             Description: {toolDescription}
             ");
         }
+
+        return true;
+        
     }
 }

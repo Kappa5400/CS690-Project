@@ -28,7 +28,7 @@ public class helperDB
         
     }
 
-    public static void createVolunteer(int task, string name)
+    public static bool createVolunteer(int task, string name)
     {
         using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
@@ -39,9 +39,12 @@ public class helperDB
         command.Parameters.AddWithValue("$name", name);
 
         command.ExecuteNonQuery();
+
+        return true;
+
     }
 
-    public static void createSudo(string password, string name)
+    public static bool createSudo(string password, string name)
     {
         using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
@@ -52,6 +55,7 @@ public class helperDB
         command.Parameters.AddWithValue("$name", name);
 
         command.ExecuteNonQuery();
+        return true;
     }
 
     public static long createPlot(int location, bool inUse, int ownerGardernerIndex, string plotDescription)
@@ -87,7 +91,7 @@ public class helperDB
         return id;
     }
 
-    public static void creatTask(bool toDoStatus, int assignedVolunteerIndex, string taskDescription)
+    public static bool createTask(bool toDoStatus, int assignedVolunteerIndex, string taskDescription)
     {
         using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
@@ -99,6 +103,7 @@ public class helperDB
         command.Parameters.AddWithValue("$taskDescription", taskDescription);
 
         command.ExecuteNonQuery();
+        return true;
     }
 
     public static void deleteGarderner(int index)

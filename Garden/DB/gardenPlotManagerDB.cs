@@ -7,7 +7,7 @@ using System;
 public class gardenPlotManagerDB
 {
 
-    public static void getOpenPlots()
+    public static bool getOpenPlots()
     {
         using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
@@ -31,9 +31,10 @@ public class gardenPlotManagerDB
             Description: {plotDescription}
             ");
         }
+        return true;
     }
 
-    public static void getUsePlots()
+    public static bool getUsePlots()
     {
         using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
@@ -57,10 +58,12 @@ public class gardenPlotManagerDB
             Description: {plotDescription}
             ");
         }
+
+        return true;
     }
 
 
-    public static void getPlotViaGarderner(int index)
+    public static bool getPlotViaGarderner(int index)
     {
         using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
@@ -88,8 +91,10 @@ public class gardenPlotManagerDB
             Description: {plotDescription}
             ");
         }
+        return true;
     }
-    public static void getPlotViaLoc(int locID)
+
+    public static bool getPlotViaLoc(int locID)
     {
         using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
@@ -118,6 +123,7 @@ public class gardenPlotManagerDB
             ");
         }
 
+        return true;
 
     }
 }

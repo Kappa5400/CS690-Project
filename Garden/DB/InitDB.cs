@@ -4,11 +4,9 @@ using Microsoft.Data.Sqlite;
 using System;
 
 
-// init db functions, create empty tables
-// sql schemas setup
 
 public class InitDB{
-    public const string ConnectionString = "Data Source=garden.db";
+    public static string ConnectionString { get; set; } = "Data Source=garden.db";
 
     static void migrate(string[] args)
     {
@@ -25,7 +23,6 @@ public class InitDB{
         initToolTable();
         initPlotTable();
     }
-
 
 
 
@@ -144,6 +141,58 @@ public class InitDB{
         createTaskTable.ExecuteNonQuery();
     }
 
-    
+
+
+    // for testing    
+    public static void init(SqliteConnection connection)
+{
+    foreach (var sql in new[]
+    {
+        @"CREATE TABLE IF NOT EXISTS garderner (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            toolUsing BOOL DEFAULT 0,
+            plotOwn BOOL DEFAULT 0,
+            toolUsingIndex INTEGER,
+            plotOwnIndex INTEGER,
+            name STRING
+        );",
+        @"CREATE TABLE IF NOT EXISTS volunteer (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            task INTEGER,
+            name STRING
+        );",
+        @"CREATE TABLE IF NOT EXISTS sudo (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            password STRING,
+            name STRING
+        );",
+        "INSERT INTO sudo (password, name) SELECT 'sudo', 'sudo' WHERE NOT EXISTS (SELECT 1 FROM sudo WHERE name = 'sudo');",
+        @"CREATE TABLE IF NOT EXISTS plot (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            location INTEGER NOT NULL,
+            inUse BOOL DEFAULT 0,
+            ownerGardernerIndex INTEGER,
+            plotDescription STRING
+        );",
+        @"CREATE TABLE IF NOT EXISTS tool (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            inUse BOOL DEFAULT 0,
+            usingGardernerIndex INTEGER,
+            toolDescription STRING
+        );",
+        @"CREATE TABLE IF NOT EXISTS task (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            toDoStatus BOOL DEFAULT 1,
+            assignedVolunteerIndex INTEGER,
+            taskDescription STRING
+        );"
+    })
+    {
+        var cmd = connection.CreateCommand();
+        cmd.CommandText = sql;
+        cmd.ExecuteNonQuery();
+    }
+}
+
 }
 
