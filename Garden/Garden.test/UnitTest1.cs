@@ -133,6 +133,66 @@ public class UnitTest1 : IDisposable
 
     }
 
+    [Fact]
+    public void getUseTooltest()
+    {
+        _db.MasterConn.CreateCommand(); 
+
+        helperDB.createTool( false, 0, "test");
+        helperDB.createGarderner(true, false, 0, 0, "test");
+
+        bool res = toolManagerDB.getUseTools();
+
+        Assert.True(res = true);
+
+    }
+
+    [Fact]
+    public void getOpenTooltest()
+    {
+        _db.MasterConn.CreateCommand(); 
+
+        helperDB.createTool( false, 0, "test");
+        helperDB.createGarderner(true, false, 0, 0, "test");
+
+        bool res = toolManagerDB.getOpenTools();
+
+        Assert.True(res = true);
+
+    }
+
+    [Fact]
+    public void passwordPass()
+    {
+        _db.MasterConn.CreateCommand(); 
+
+        bool res = Auth.CheckPassword("sudo","sudo");
+
+        Assert.True(res = true);
+
+    }
+    
+    [Fact]
+    public void passwordFailEmpty()
+    {
+        _db.MasterConn.CreateCommand(); 
+
+        bool res = Auth.CheckPassword("","");
+
+        Assert.False(res);
+
+    }
+
+    [Fact]
+    public void passwordWrong()
+    {
+        _db.MasterConn.CreateCommand(); 
+
+        bool res = Auth.CheckPassword("fail","fail");
+
+        Assert.False(res);
+
+    }
 
 
     public void Dispose() => _db.Dispose();
