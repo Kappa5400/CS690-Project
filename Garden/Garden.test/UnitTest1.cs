@@ -38,9 +38,9 @@ public class UnitTest1 : IDisposable
        
         _db.MasterConn.CreateCommand(); 
         
-        bool res = helperDB.createVolunteer( 1, "test");
+        long res = helperDB.createVolunteer( 1, "test");
         
-        Assert.True(res = true);
+        Assert.Equal(1, res);
     }
 
     [Fact]
@@ -71,9 +71,9 @@ public class UnitTest1 : IDisposable
        
         _db.MasterConn.CreateCommand(); 
         
-        bool res = helperDB.createTask( false, 0, "test");
+        long res = helperDB.createTask( false, 0, "test");
         
-        Assert.True(res = true);
+        Assert.Equal(1, res);
     }
 
     // to do, other crud

@@ -28,19 +28,19 @@ public class helperDB
         
     }
 
-    public static bool createVolunteer(int task, string name)
+    public static long createVolunteer(int task, string name)
     {
         using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
 
         using var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO volunteer (task, name) VALUES ($task, $name)";
+        command.CommandText = "INSERT INTO volunteer (task, name) VALUES ($task, $name); SELECT last_insert_rowid();";
         command.Parameters.AddWithValue("$task", task);
         command.Parameters.AddWithValue("$name", name);
 
-        command.ExecuteNonQuery();
+        long newId = (long)command.ExecuteScalar();
 
-        return true;
+        return newId;
 
     }
 
@@ -91,19 +91,19 @@ public class helperDB
         return id;
     }
 
-    public static bool createTask(bool toDoStatus, int assignedVolunteerIndex, string taskDescription)
+    public static long createTask(bool toDoStatus, int assignedVolunteerIndex, string taskDescription)
     {
         using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
 
         using var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO task (toDoStatus, assignedVolunteerIndex, taskDescription) VALUES ($toDoStatus, $assignedVolunteerIndex, $taskDescription)";
+        command.CommandText = "INSERT INTO task (toDoStatus, assignedVolunteerIndex, taskDescription) VALUES ($toDoStatus, $assignedVolunteerIndex, $taskDescription); SELECT last_insert_rowid();";
         command.Parameters.AddWithValue("$toDoStatus", toDoStatus);
         command.Parameters.AddWithValue("$assignedVolunteerIndex", assignedVolunteerIndex);
         command.Parameters.AddWithValue("$taskDescription", taskDescription);
 
-        command.ExecuteNonQuery();
-        return true;
+        long id = (long)command.ExecuteScalar();
+        return id;
     }
 
     public static void deleteGarderner(int index)

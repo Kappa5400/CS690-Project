@@ -37,6 +37,11 @@ public class crud
             toolCrud();
         }
 
+        else if(command == "Tasks")
+        {
+            taskCrud();
+        }
+
         else if (command == "Users")
         {
             string userCommandUserTypeSelect;
@@ -167,9 +172,10 @@ public class crud
             // volunteer
             if (userType == 2)
             {
-                int taskNum = int.Parse(AskForInput("Enter volunteer task number: ") ?? "0");
+                int taskNum = int.Parse(AskForInput("Enter assigned task number (if none type 0): ") ?? "0");
                 string name = AskForInput("Enter volunteer name: ");
-                helperDB.createVolunteer(taskNum, name); 
+                long volID = helperDB.createVolunteer(taskNum, name); 
+                helperDB.updateTask(false, (int)volID, "To do", taskNum);
                 return;
             }
             // sudo
@@ -376,6 +382,82 @@ public class crud
                     var (id, oldInUse, oldPlotOwn, oldToolIndex, oldPlotIndex, name) = selectDB.getGardernerViaIndex(usingGardernerIndex);
                     helperDB.updateGarderner((int)id, true, oldPlotOwn, (int)newId, oldPlotIndex, name);
                 }
+                return;
+            }
+           
+        }
+        else if (crudCommand == "Update")
+        {
+            int index = int.Parse(AskForInput("Select index: ") ?? "0");
+            // To implement update logic
+        }
+        else if (crudCommand == "Delete")
+        {
+            int index = int.Parse(AskForInput("Select index to delete: ") ?? "0");
+            
+            helperDB.deletePlot(index);
+            return;
+            
+        }
+
+        else if (crudCommand == "Back")
+        {
+            return;
+        }
+    }
+
+        public static void taskCrud()
+    {
+        var crudPrompt = new SelectionPrompt<string>()
+        .Title("Select an option")
+        .AddChoices(new[]
+        {
+            "View all", "View one", "Create", "Update", "Delete", "Back"
+        });
+    
+        var crudCommand = AnsiConsole.Prompt(crudPrompt);
+
+        if (crudCommand == "View all")
+        {
+            
+                selectDB.getAllTasks();
+                return;
+        }
+        
+        else if (crudCommand == "View one")
+        {
+            int index = int.Parse(AskForInput("Select index: ") ?? "0");
+            
+            
+            {
+                selectDB.getTaskViaIndex(index);
+                return;
+            }
+            
+        }
+        else if (crudCommand == "Create")
+        {
+
+            {
+              
+               
+                bool toDo = false;
+                int assignedVolunteer = 0;
+                string taskDesc = ""; 
+
+               toDo = bool.Parse(AskForInput("Does this task still need to be done? Type false if no, type true if yes: "));
+                
+                assignedVolunteer = int.Parse(AskForInput("Enter index of volunteer assigned to this task: "));
+               
+                taskDesc = AskForInput("Enter description of task: ");
+
+                long newId = helperDB.createTask(toDo, assignedVolunteer, taskDesc);
+
+                //update vol
+                
+                var (id, fetchTask, fetchName) = selectDB.getVolunteerViaIndex(assignedVolunteer);
+                helperDB.updateVolunteer((int)id, (int)newId, fetchName);
+                
                 return;
             }
            

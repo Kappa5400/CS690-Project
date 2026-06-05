@@ -118,7 +118,7 @@ public class selectDB{
         }
     }
 
-    public static void getVolunteerViaIndex(int index)
+    public static (long, int, string) getVolunteerViaIndex(int index)
     {
         using var connection = new SqliteConnection(InitDB.ConnectionString);
         connection.Open();
@@ -130,29 +130,23 @@ public class selectDB{
         using var reader = command.ExecuteReader();
 
         long id = 0;
-        bool toolUsing = false;
-        bool plotOwn = false;
-        int toolUsingIndex = 0;
-        int plotOwnIndex = 0;
-        string name = string.Empty;
+        int task = 0;
+        string name = "";
 
         while (reader.Read())
         {
             id = reader.GetInt64(0);
-            toolUsing = reader.GetBoolean(1); 
-            plotOwn = reader.GetBoolean(2);   
-            toolUsingIndex = reader.GetInt32(3);
-            plotOwnIndex = reader.GetInt32(4);
-            name = reader.GetString(5);
+            task = reader.GetInt32(1); 
+            name = reader.GetString(2);
         }
 
         Console.WriteLine($@"ID: {id}
             Name: {name}
-            Using a tool currently: {toolUsing}
-            Owns a plot: {plotOwn}
-            Index of tool if using: {toolUsingIndex}
-            Index of plot if own: {plotOwnIndex}
+            Task: {task}
+            Name: {name}
             ");
+
+        return(id, task, name);
     }
 
     public static (long id, string password, string name) getSudoViaIndex(int index)
@@ -235,7 +229,7 @@ public class selectDB{
         }
     }
 
-    public static void getTaskViaIndex(int index)
+    public static (long, bool, int, string) getTaskViaIndex(int index)
     {
         using var connection = new SqliteConnection(InitDB.ConnectionString);  
         connection.Open();
@@ -263,7 +257,11 @@ public class selectDB{
             To do status: {toDoStatus}
             Assigned volunteer's index: {assignedVolunteerIndex}
             Description: {taskDescription}");
+    
+        return (id, toDoStatus, assignedVolunteerIndex, taskDescription);
+
     }
+
 
     public static void getAllPlots()
     {

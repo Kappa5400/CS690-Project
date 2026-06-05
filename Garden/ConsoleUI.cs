@@ -32,11 +32,11 @@ public class ConsoleUI {
                                     .Title("Select a menu")
                                     .AddChoices(new[]
                                     {
-                                        "test","garden plot manager","tool tracker","end"
+                                        "task manager","garden plot manager","tool tracker","end"
                                     }));
-                if (command == "test")
+                if (command == "task manager")
                 {
-                    Console.WriteLine("Hi");
+                    taskManager.start();
                 }
                 else if (command == "tool tracker")
                 {
