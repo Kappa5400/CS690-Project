@@ -1,18 +1,31 @@
-
 using Garden;
 using Microsoft.Data.Sqlite;
+using System;
 
-    public class DbTest : IDisposable
+public class DbTest : IDisposable
+{
+    // Give the in-memory database a specific name and enable the shared cache
+    private const string SharedMemoryConnectionString = "Data Source=GardenVolatileDb;Mode=Memory;Cache=Shared";
+    
+    // This keeps the database alive in RAM throughout the test life cycle
+    public SqliteConnection MasterConn { get; }
+
+    public DbTest()
     {
-        public SqliteConnection Conn { get; }
+        // 1. Force InitDB and helperDB to point to the shared RAM instance
+        InitDB.ConnectionString = SharedMemoryConnectionString;
 
-        public DbTest()
-        {
-            Conn = new SqliteConnection("Data Source=:memory:");
-            Conn.Open();
-            // paste your real schema here
-            InitDB.init(Conn);
-        }
+        // 2. Open the master connection to lock the database into RAM
+        MasterConn = new SqliteConnection(SharedMemoryConnectionString);
+        MasterConn.Open();
 
-        public void Dispose() => Conn.Dispose();
+        // 3. Build the tables inside this shared memory space
+        InitDB.init(MasterConn);
     }
+
+    public void Dispose()
+    {
+        // Closing this master connection completely purges the database from RAM
+        MasterConn.Dispose();
+    }
+}
